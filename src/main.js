@@ -3,7 +3,6 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 
-import Notiflix from 'notiflix';
 
 
 import  createImageGallery  from './js/render-function.js';
@@ -12,7 +11,6 @@ import { fetchRequest } from './js/pixabay-api.js';
 const form = document.querySelector('.form');
 const gallery = document.querySelector(".gallery");
 const loadBtn = document.querySelector(".loadMoreBtn");
-
 const loader = document.querySelector('.loader');
 
 let queryValue = '';
@@ -58,6 +56,10 @@ form.addEventListener('submit', async (event)=>{
   gallery.innerHTML = '';
   queryValue = event.currentTarget.elements.search_query.value.trim().toLowerCase();
   params.page = 1;
+
+
+  loader.classList.remove('hidden');
+
 
   try {
     const { hits, totalHits } = await fetchRequest(queryValue, params.page, params.per_page);
@@ -125,6 +127,7 @@ async function handleLoadMore() {
     } else {
       loadMoreBtn.enable();
     }
+    loader.classList.add('hidden');
   }
 }
 
