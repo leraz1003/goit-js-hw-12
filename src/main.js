@@ -60,11 +60,7 @@ form.addEventListener('submit', async (event)=>{
   params.page = 1;
 
   try {
-      const { hits, totalHits } = await fetchRequest(queryValue, params.page, params.per_page);
-
-    console.log("totalHits", totalHits);
-    console.log("hits", hits);
-
+    const { hits, totalHits } = await fetchRequest(queryValue, params.page, params.per_page);
 
     if (!hits || hits.length === 0) {
         iziToast.show({
