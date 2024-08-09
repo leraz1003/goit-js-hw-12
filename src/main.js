@@ -79,7 +79,8 @@ form.addEventListener('submit', async (event)=>{
       loadMoreBtn.hide();
 
       } else {
-        createImageGallery(hits);
+      createImageGallery(hits);
+
         initLightbox();
         loadMoreBtn.show();
         loadMoreBtn.enable();
