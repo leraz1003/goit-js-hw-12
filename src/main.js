@@ -15,6 +15,20 @@ const loader = document.querySelector('.loader');
 
 let queryValue = '';
 
+export function showError(errorMessage) {
+  iziToast.show({
+          message: errorMessage,
+          backgroundColor: "#ef4040",
+          position: "topRight",
+          messageSize: 16,
+          messageColor: '#fff',
+          messageLineHeight: "150%",
+
+          image: './img/error.svg',
+          imageWidth: 24,
+          timeout: 4000
+        });
+}
 
 class ButtonService {
   constructor(buttonEL, hiddenClass) {
@@ -65,18 +79,7 @@ form.addEventListener('submit', async (event)=>{
     const { hits, totalHits } = await fetchRequest(queryValue, params.page, params.per_page);
 
     if (!hits || hits.length === 0) {
-        iziToast.show({
-          message: 'Sorry, there are no images matching your search query. Please try again!',
-          backgroundColor: "#ef4040",
-          position: "topRight",
-          messageSize: 16,
-          messageColor: '#fff',
-          messageLineHeight: "150%",
-
-          image: './img/error.svg',
-          imageWidth: 24,
-          timeout: 4000
-        });
+      showError('Sorry, there are no images matching your search query. Please try again!');
 
       loadMoreBtn.hide();
 
@@ -101,7 +104,7 @@ form.addEventListener('submit', async (event)=>{
     }
   }
   catch (error) {
-    console.log(error);
+    showError(error);
   }
   finally {
     loader.classList.add('hidden');
@@ -111,18 +114,22 @@ form.addEventListener('submit', async (event)=>{
 
 async function handleLoadMore() {
   loader.classList.remove('hidden');
-  loadMoreBtn.disable();
+  loadMoreBtn.hide();
+  // loadMoreBtn.disable();
 
   params.page += 1;
 
   try {
-    const { hits } = await fetchRequest(params);
+    const { hits } = await fetchRequest(queryValue, params.page, params.per_page);
     createImageGallery(hits);
+    loadMoreBtn.show();
+
   } catch (error) {
-    console.log(error);
+     showError(error);
   } finally {
     if (params.page === params.maxPage) {
       loadMoreBtn.hide();
+      showError("We're sorry, but you've reached the end of search results.");
       loadBtn.removeEventListener("click", handleLoadMore);
     } else {
       loadMoreBtn.enable();

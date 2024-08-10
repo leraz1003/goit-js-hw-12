@@ -1,4 +1,5 @@
 import axios from "axios";
+import { showError } from "../main";
 
 const BASE_URL = "https://pixabay.com/api/";
 axios.defaults.baseURL = BASE_URL;
@@ -28,7 +29,7 @@ export async function fetchRequest(queryValue, page = 1, per_page = 15) {
     const response = await axios.get(`?${searchParams}`);
     return response.data;
   } catch (error) {
-    console.log(error);
+         showError(error);
   } finally {
     loader.classList.add('hidden');
   }
